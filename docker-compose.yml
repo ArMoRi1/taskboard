@@ -1,0 +1,47 @@
+version: '3.9'
+
+services:
+  # Backend (Django)
+  backend:
+    build: ./backend
+    container_name: taskboard_backend
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - DATABASE_URL=postgresql://taskuser:taskpass@db:5432/taskboard
+    depends_on:
+      - db
+    command: python manage.py runserver 0.0.0.0:8000
+
+  # Frontend (React + Vite)
+  frontend:
+    build: ./frontend
+    container_name: taskboard_frontend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules  # не перезаписувати node_modules з хоста
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+  # Database (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    container_name: taskboard_db
+    environment:
+      POSTGRES_DB: taskboard
+      POSTGRES_USER: taskuser
+      POSTGRES_PASSWORD: taskpass
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  postgres_data:
