@@ -7,11 +7,11 @@ import TaskList from "./components/tasks/TaskList.jsx";
 function App() {
   
   return (
-    <>
+    <div id="app">
       <Header/>
       <Filters/>
       <TaskList/>
-    </>
+    </div>
   )
 }
 

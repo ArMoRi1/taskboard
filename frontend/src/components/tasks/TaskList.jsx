@@ -2,7 +2,6 @@ import { useState } from 'react';
 import TaskListItem from './TaskListItem';
 
 function TaskList() {
-  // Mock дані для тестування
   const [tasks, setTasks] = useState([
     {
       id: 1,
@@ -32,24 +31,23 @@ function TaskList() {
 
   const handleEdit = (task) => {
     console.log('Edit task:', task);
-    // TODO: відкрити TaskModal для редагування
   };
 
   const handleDelete = (id) => {
     console.log('Delete task:', id);
-    // Видаляємо задачу
     setTasks(tasks.filter(task => task.id !== id));
   };
 
   return (
-    <div className="px-8 py-6">
+    <div className="px-8 py-6 bg-gradient-to-b from-indigo-50 to-purple-50 min-h-screen">
       <div className="max-w-4xl mx-auto">
         {tasks.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No tasks yet. Create your first task!</p>
+          <div className="text-center py-16 bg-white rounded-xl shadow-md border-2 border-purple-200">
+            <div className="text-6xl mb-4">📝</div>
+            <p className="text-gray-600 text-lg font-medium">No tasks yet. Create your first task!</p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {tasks.map((task) => (
               <TaskListItem
                 key={task.id}
