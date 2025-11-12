@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
 
-const CategoryModal = ({ isOpen, onClose, onSave, category = null }) => {
+const StatusModal = ({ isOpen, onClose, onSave, status = null }) => {
   const [name, setName] = useState('');
 
   useEffect(() => {
-    if (category) {
-      setName(category.name);
+    if (status) {
+      setName(status.name);
     } else {
       setName('');
     }
-  }, [category, isOpen]);
+  }, [status, isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave({
-      id: category ? category.id : Date.now(),
+      id: status ? status.id : Date.now(),
       name
     });
   };
@@ -23,31 +23,31 @@ const CategoryModal = ({ isOpen, onClose, onSave, category = null }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border-2 border-purple-200">
-        <div className="bg-gradient-to-r from-purple-500 to-pink-600 px-6 py-4 rounded-t-2xl">
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border-2 border-blue-200">
+        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-4 rounded-t-2xl">
           <h2 className="text-2xl font-bold text-white">
-            {category ? 'Edit Category' : 'Create New Category'}
+            {status ? 'Edit Status' : 'Create New Status'}
           </h2>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Category Name
+              Status Name
             </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g., Work, Study, Personal..."
+              placeholder="e.g., Planned, In Progress, Done..."
               required
-              className="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:border-purple-500 transition-colors"
+              className="w-full px-4 py-3 border-2 border-blue-200 rounded-lg focus:outline-none focus:border-blue-500 transition-colors"
             />
           </div>
 
-          <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-4">
+          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
             <p className="text-sm text-gray-600">
-              <span className="font-semibold">Current categories:</span> Work, Study, Personal
+              <span className="font-semibold">Current statuses:</span> Planned, In Progress, Done
             </p>
           </div>
 
@@ -61,9 +61,9 @@ const CategoryModal = ({ isOpen, onClose, onSave, category = null }) => {
             </button>
             <button
               type="submit"
-              className="flex-1 px-6 py-3 text-white font-semibold bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 rounded-lg transition-all shadow-lg"
+              className="flex-1 px-6 py-3 text-white font-semibold bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 rounded-lg transition-all shadow-lg"
             >
-              {category ? 'Save Changes' : 'Create Category'}
+              {status ? 'Save Changes' : 'Create Status'}
             </button>
           </div>
         </form>
@@ -72,4 +72,4 @@ const CategoryModal = ({ isOpen, onClose, onSave, category = null }) => {
   );
 };
 
-export default CategoryModal;
+export default StatusModal;
