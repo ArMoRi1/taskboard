@@ -28,7 +28,7 @@ function App() {
 
   const handleSaveTask = (taskData) => {
     if (editingTask) {
-      updateTask(taskData);
+      updateTask({ ...taskData, id: editingTask.id });
     } else {
       addTask(taskData);
     }

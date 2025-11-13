@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 const TaskModal = ({ isOpen, onClose, onSave, task = null, categories = [], statuses = [] }) => {
   const [formData, setFormData] = useState({
     title: '',
-    status: 'Planned',
-    category: 'Work'
+    status: '',
+    category: ''
   });
 
   useEffect(() => {
@@ -17,18 +17,15 @@ const TaskModal = ({ isOpen, onClose, onSave, task = null, categories = [], stat
     } else {
       setFormData({
         title: '',
-        status: statuses[0]?.name || 'Planned',
-        category: categories[0]?.name || 'Work'
+        status: statuses[0]?.name || '',
+        category: categories[0]?.name || ''
       });
     }
   }, [task, isOpen, categories, statuses]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({
-      id: task ? task.id : Date.now(),
-      ...formData
-    });
+    onSave(formData);
   };
 
   if (!isOpen) return null;
