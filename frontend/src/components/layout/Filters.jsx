@@ -1,19 +1,19 @@
 import { useState } from 'react';
+import { useTasks } from '../../contexts/TaskContext';
 
 function Filters() {
+  const { categories, statuses } = useTasks();
   const [status, setStatus] = useState('All');
   const [category, setCategory] = useState('All');
 
-  const statuses = ['All', 'Planned', 'In Progress', 'Done'];
-  const categories = ['All', 'Work', 'Study', 'Personal'];
+  const statusOptions = ['All', ...statuses.map(s => s.name)];
+  const categoryOptions = ['All', ...categories.map(c => c.name)];
 
   return (
     <div className="bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-purple-200 shadow-sm">
       <div className="max-w-4xl mx-auto py-5">
-        {/* Контейнер з двома блоками */}
         <div className="flex justify-between items-center">
           
-          {/* Блок 1 — Status Filter */}
           <div className="flex items-center gap-3">
             <label htmlFor="status" className="text-sm font-semibold text-gray-700">
               Status:
@@ -27,7 +27,7 @@ function Filters() {
                       focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500
                       hover:border-purple-400 transition-colors cursor-pointer"
             >
-              {statuses.map((s) => (
+              {statusOptions.map((s) => (
                 <option key={s} value={s}>
                   {s}
                 </option>
@@ -35,7 +35,6 @@ function Filters() {
             </select>
           </div>
 
-          {/* Блок 2 — Category Filter */}
           <div className="flex items-center gap-3">
             <label htmlFor="category" className="text-sm font-semibold text-gray-700">
               Category:
@@ -49,7 +48,7 @@ function Filters() {
                       focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500
                       hover:border-purple-400 transition-colors cursor-pointer"
             >
-              {categories.map((c) => (
+              {categoryOptions.map((c) => (
                 <option key={c} value={c}>
                   {c}
                 </option>

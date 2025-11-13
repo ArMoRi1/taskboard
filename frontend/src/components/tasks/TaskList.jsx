@@ -1,42 +1,8 @@
-import { useState } from 'react';
 import TaskListItem from './TaskListItem';
+import { useTasks } from '../../contexts/TaskContext';
 
-function TaskList() {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Complete project documentation",
-      status: "In Progress",
-      category: "Work"
-    },
-    {
-      id: 2,
-      title: "Study React hooks",
-      status: "Planned",
-      category: "Study"
-    },
-    {
-      id: 3,
-      title: "Buy groceries",
-      status: "Done",
-      category: "Personal"
-    },
-    {
-      id: 4,
-      title: "Prepare presentation",
-      status: "In Progress",
-      category: "Work"
-    },
-  ]);
-
-  const handleEdit = (task) => {
-    console.log('Edit task:', task);
-  };
-
-  const handleDelete = (id) => {
-    console.log('Delete task:', id);
-    setTasks(tasks.filter(task => task.id !== id));
-  };
+function TaskList({ onEditTask }) {
+  const { tasks, deleteTask } = useTasks();
 
   return (
     <div className="px-8 py-6 bg-gradient-to-b from-indigo-50 to-purple-50 min-h-screen">
@@ -52,8 +18,8 @@ function TaskList() {
               <TaskListItem
                 key={task.id}
                 task={task}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
+                onEdit={onEditTask}
+                onDelete={deleteTask}
               />
             ))}
           </div>

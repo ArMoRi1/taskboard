@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
+const TaskModal = ({ isOpen, onClose, onSave, task = null, categories = [], statuses = [] }) => {
   const [formData, setFormData] = useState({
     title: '',
     status: 'Planned',
@@ -17,11 +17,11 @@ const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
     } else {
       setFormData({
         title: '',
-        status: 'Planned',
-        category: 'Work'
+        status: statuses[0]?.name || 'Planned',
+        category: categories[0]?.name || 'Work'
       });
     }
-  }, [task, isOpen]);
+  }, [task, isOpen, categories, statuses]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -66,9 +66,9 @@ const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
               onChange={(e) => setFormData({ ...formData, status: e.target.value })}
               className="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:border-purple-500 transition-colors bg-white"
             >
-              <option value="Planned">Planned</option>
-              <option value="In Progress">In Progress</option>
-              <option value="Done">Done</option>
+              {statuses.map(status => (
+                <option key={status.id} value={status.name}>{status.name}</option>
+              ))}
             </select>
           </div>
 
@@ -81,9 +81,9 @@ const TaskModal = ({ isOpen, onClose, onSave, task = null }) => {
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
               className="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:border-purple-500 transition-colors bg-white"
             >
-              <option value="Work">Work</option>
-              <option value="Study">Study</option>
-              <option value="Personal">Personal</option>
+              {categories.map(category => (
+                <option key={category.id} value={category.name}>{category.name}</option>
+              ))}
             </select>
           </div>
 

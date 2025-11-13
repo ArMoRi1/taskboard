@@ -2,21 +2,21 @@ import { useState, useEffect } from 'react';
 
 const StatusModal = ({ isOpen, onClose, onSave, status = null }) => {
   const [name, setName] = useState('');
+  const [color, setColor] = useState('#6B7280');
 
   useEffect(() => {
     if (status) {
       setName(status.name);
+      setColor(status.color || '#6B7280');
     } else {
       setName('');
+      setColor('#6B7280');
     }
   }, [status, isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({
-      id: status ? status.id : Date.now(),
-      name
-    });
+    onSave({ name, color });
   };
 
   if (!isOpen) return null;
@@ -45,10 +45,38 @@ const StatusModal = ({ isOpen, onClose, onSave, status = null }) => {
             />
           </div>
 
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
-            <p className="text-sm text-gray-600">
-              <span className="font-semibold">Current statuses:</span> Planned, In Progress, Done
-            </p>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-3">
+              Choose Color
+            </label>
+            
+            {/* Великий Color Picker */}
+            <div className="flex flex-col items-center gap-4 p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200">
+              <input
+                type="color"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                className="w-full h-32 rounded-lg cursor-pointer border-4 border-white shadow-lg"
+                style={{ colorScheme: 'light' }}
+              />
+              
+              {/* HEX Display */}
+              <div className="w-full flex items-center gap-2">
+                <span className="text-sm font-semibold text-gray-700">HEX:</span>
+                <input
+                  type="text"
+                  value={color}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (/^#[0-9A-Fa-f]{0,6}$/.test(value)) {
+                      setColor(value);
+                    }
+                  }}
+                  className="flex-1 px-3 py-2 border-2 border-gray-300 rounded-lg font-mono text-sm uppercase font-bold text-center"
+                  maxLength={7}
+                />
+              </div>
+            </div>
           </div>
 
           <div className="flex gap-3 pt-4">
