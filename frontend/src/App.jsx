@@ -6,15 +6,26 @@ import TaskList from "./components/tasks/TaskList.jsx";
 import TaskModal from "./components/modals/TaskModal.jsx";
 import CategoryModal from "./components/modals/CategoryModal.jsx";
 import StatusModal from "./components/modals/StatusModal.jsx";
+import LoginForm from "./components/auth/LoginForm.jsx";
+import RegisterForm from "./components/auth/RegisterForm.jsx";
 import { useTasks } from './contexts/TaskContext.jsx';
+import { useAuth } from './contexts/AuthContext.jsx';
 
 function App() {
   const { addTask, updateTask, addCategory, addStatus, categories, statuses } = useTasks();
+  const { isAuthenticated } = useAuth();
   
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [showLogin, setShowLogin] = useState(true);
+
+  if (!isAuthenticated) {
+    return showLogin 
+      ? <LoginForm onSwitchToRegister={() => setShowLogin(false)} />
+      : <RegisterForm onSwitchToLogin={() => setShowLogin(true)} />;
+  }
 
   const handleCreateTask = () => {
     setEditingTask(null);
