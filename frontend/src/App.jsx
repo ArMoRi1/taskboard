@@ -79,19 +79,17 @@ function App() {
         >
           + Task
         </button>
-        
-        <button
-          onClick={() => setIsStatusModalOpen(true)}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600"
-        >
-          + Status
-        </button>
-
         <button
           onClick={() => setIsCategoryModalOpen(true)}
           className="px-4 py-2 bg-purple-500 text-white rounded-lg shadow-lg hover:bg-purple-600"
         >
           + Category
+        </button>
+        <button
+          onClick={() => setIsStatusModalOpen(true)}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow-lg hover:bg-blue-600"
+        >
+          + Status
         </button>
       </div>
     </div>

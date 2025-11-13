@@ -34,17 +34,17 @@ export function TaskProvider({ children }) {
     { 
       id: 1, 
       name: 'Work',
-      color: '#8B5CF6' // фіолетовий
+      color: '#8B5CF6'
     },
     { 
       id: 2, 
       name: 'Study',
-      color: '#F59E0B' // жовтий
+      color: '#F59E0B'
     },
     { 
       id: 3, 
       name: 'Personal',
-      color: '#EC4899' // рожевий
+      color: '#EC4899'
     }
   ]);
 
@@ -52,17 +52,17 @@ export function TaskProvider({ children }) {
     { 
       id: 1, 
       name: 'Planned',
-      color: '#6B7280' // сірий
+      color: '#6B7280'
     },
     { 
       id: 2, 
       name: 'In Progress',
-      color: '#3B82F6' // синій
+      color: '#3B82F6'
     },
     { 
       id: 3, 
       name: 'Done',
-      color: '#10B981' // зелений
+      color: '#10B981'
     }
   ]);
 
@@ -81,17 +81,33 @@ export function TaskProvider({ children }) {
   };
 
   const addCategory = (category) => {
-    setCategories([...categories, { 
-      ...category, 
-      id: Date.now()
-    }]);
+    console.log('addCategory received:', category);
+    const newCategory = {
+      id: Date.now(),
+      name: category.name,
+      color: category.color
+    };
+    console.log('addCategory creating:', newCategory);
+    setCategories(prev => {
+      const updated = [...prev, newCategory];
+      console.log('addCategory updated state:', updated);
+      return updated;
+    });
   };
 
   const addStatus = (status) => {
-    setStatuses([...statuses, { 
-      ...status, 
-      id: Date.now()
-    }]);
+    console.log('addStatus received:', status);
+    const newStatus = {
+      id: Date.now(),
+      name: status.name,
+      color: status.color
+    };
+    console.log('addStatus creating:', newStatus);
+    setStatuses(prev => {
+      const updated = [...prev, newStatus];
+      console.log('addStatus updated state:', updated);
+      return updated;
+    });
   };
 
   return (

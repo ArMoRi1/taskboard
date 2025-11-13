@@ -1,15 +1,20 @@
+import { useTasks } from '../../contexts/TaskContext';
+
 function TaskListItem({ task, onEdit, onDelete }) {
-  const statusColors = {
-    'Planned': 'bg-gradient-to-r from-slate-100 to-slate-200 text-slate-700 border-slate-300',
-    'In Progress': 'bg-gradient-to-r from-blue-100 to-indigo-200 text-blue-700 border-blue-300',
-    'Done': 'bg-gradient-to-r from-green-100 to-emerald-200 text-green-700 border-green-300',
+  const { categories, statuses } = useTasks();
+
+  const getStatusColor = (statusName) => {
+    const status = statuses.find(s => s.name === statusName);
+    return status?.color || '#6B7280';
   };
 
-  const categoryColors = {
-    'Work': 'bg-gradient-to-r from-purple-100 to-violet-200 text-purple-700 border-purple-300',
-    'Study': 'bg-gradient-to-r from-amber-100 to-yellow-200 text-amber-700 border-amber-300',
-    'Personal': 'bg-gradient-to-r from-pink-100 to-rose-200 text-pink-700 border-pink-300',
+  const getCategoryColor = (categoryName) => {
+    const category = categories.find(c => c.name === categoryName);
+    return category?.color || '#8B5CF6';
   };
+
+  const statusColor = getStatusColor(task.status);
+  const categoryColor = getCategoryColor(task.category);
 
   return (
     <div className="bg-white border-2 border-purple-200 rounded-xl p-5 hover:shadow-lg hover:border-purple-300 transition-all duration-200">
@@ -33,10 +38,24 @@ function TaskListItem({ task, onEdit, onDelete }) {
       </div>
 
       <div className="flex gap-3">
-        <span className={`px-4 py-1.5 text-xs font-semibold rounded-full border-2 shadow-sm ${statusColors[task.status]}`}>
+        <span 
+          className="px-4 py-1.5 text-xs font-semibold rounded-full border-2 shadow-sm"
+          style={{ 
+            backgroundColor: statusColor + '33',
+            color: statusColor,
+            borderColor: statusColor
+          }}
+        >
           {task.status}
         </span>
-        <span className={`px-4 py-1.5 text-xs font-semibold rounded-full border-2 shadow-sm ${categoryColors[task.category]}`}>
+        <span 
+          className="px-4 py-1.5 text-xs font-semibold rounded-full border-2 shadow-sm"
+          style={{ 
+            backgroundColor: categoryColor + '33',
+            color: categoryColor,
+            borderColor: categoryColor
+          }}
+        >
           {task.category}
         </span>
       </div>

@@ -16,7 +16,9 @@ const StatusModal = ({ isOpen, onClose, onSave, status = null }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({ name, color });
+    const data = { name, color };
+    console.log('StatusModal sending:', data);
+    onSave(data);
   };
 
   if (!isOpen) return null;
@@ -50,7 +52,6 @@ const StatusModal = ({ isOpen, onClose, onSave, status = null }) => {
               Choose Color
             </label>
             
-            {/* Великий Color Picker */}
             <div className="flex flex-col items-center gap-4 p-4 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border-2 border-gray-200">
               <input
                 type="color"
@@ -60,7 +61,6 @@ const StatusModal = ({ isOpen, onClose, onSave, status = null }) => {
                 style={{ colorScheme: 'light' }}
               />
               
-              {/* HEX Display */}
               <div className="w-full flex items-center gap-2">
                 <span className="text-sm font-semibold text-gray-700">HEX:</span>
                 <input
