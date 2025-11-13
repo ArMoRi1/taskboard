@@ -52,7 +52,7 @@ function App() {
 
   return (
     <div id="app">
-      <Header onCreateTask={handleCreateTask} />
+      <Header/>
       <Filters 
         selectedStatus={selectedStatus}
         setSelectedStatus={setSelectedStatus}
