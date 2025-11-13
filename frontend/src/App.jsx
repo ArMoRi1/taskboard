@@ -20,6 +20,9 @@ function App() {
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
   const [showLogin, setShowLogin] = useState(true);
+  
+  const [selectedStatus, setSelectedStatus] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('All');
 
   if (!isAuthenticated) {
     return showLogin 
@@ -50,8 +53,17 @@ function App() {
   return (
     <div id="app">
       <Header onCreateTask={handleCreateTask} />
-      <Filters />
-      <TaskList onEditTask={handleEditTask} />
+      <Filters 
+        selectedStatus={selectedStatus}
+        setSelectedStatus={setSelectedStatus}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+      />
+      <TaskList 
+        onEditTask={handleEditTask}
+        selectedStatus={selectedStatus}
+        selectedCategory={selectedCategory}
+      />
 
       <TaskModal
         isOpen={isTaskModalOpen}

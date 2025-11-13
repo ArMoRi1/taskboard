@@ -1,20 +1,26 @@
 import TaskListItem from './TaskListItem';
 import { useTasks } from '../../contexts/TaskContext';
 
-function TaskList({ onEditTask }) {
+function TaskList({ onEditTask, selectedStatus, selectedCategory }) {
   const { tasks, deleteTask } = useTasks();
+
+  const filteredTasks = tasks.filter(task => {
+    const statusMatch = selectedStatus === 'All' || task.status === selectedStatus;
+    const categoryMatch = selectedCategory === 'All' || task.category === selectedCategory;
+    return statusMatch && categoryMatch;
+  });
 
   return (
     <div className="px-8 py-6 bg-gradient-to-b from-indigo-50 to-purple-50 min-h-screen">
       <div className="max-w-4xl mx-auto">
-        {tasks.length === 0 ? (
+        {filteredTasks.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-xl shadow-md border-2 border-purple-200">
             <div className="text-6xl mb-4">📝</div>
-            <p className="text-gray-600 text-lg font-medium">No tasks yet. Create your first task!</p>
+            <p className="text-gray-600 text-lg font-medium">No tasks found</p>
           </div>
         ) : (
           <div className="space-y-4">
-            {tasks.map((task) => (
+            {filteredTasks.map((task) => (
               <TaskListItem
                 key={task.id}
                 task={task}
