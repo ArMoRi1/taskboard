@@ -1,16 +1,22 @@
-import { useTasks } from '../../contexts/TaskContext';
-
-function TaskListItem({ task, onEdit, onDelete }) {
-  const { categories, statuses } = useTasks();
-
-  const getStatusColor = (statusName) => {
-    const status = statuses.find(s => s.name === statusName);
+function TaskListItem({ task, categories, statuses, onEdit, onDelete }) {
+  const getStatusColor = (statusId) => {
+    const status = statuses.find(s => s.id === statusId);
     return status?.color || '#6B7280';
   };
 
-  const getCategoryColor = (categoryName) => {
-    const category = categories.find(c => c.name === categoryName);
+  const getCategoryColor = (categoryId) => {
+    const category = categories.find(c => c.id === categoryId);
     return category?.color || '#8B5CF6';
+  };
+
+  const getStatusName = (statusId) => {
+    const status = statuses.find(s => s.id === statusId);
+    return status?.name || 'Unknown';
+  };
+
+  const getCategoryName = (categoryId) => {
+    const category = categories.find(c => c.id === categoryId);
+    return category?.name || 'Unknown';
   };
 
   const statusColor = getStatusColor(task.status);
@@ -46,7 +52,7 @@ function TaskListItem({ task, onEdit, onDelete }) {
             borderColor: statusColor
           }}
         >
-          {task.status}
+          {getStatusName(task.status)}
         </span>
         <span 
           className="px-4 py-1.5 text-xs font-semibold rounded-full border-2 shadow-sm"
@@ -56,7 +62,7 @@ function TaskListItem({ task, onEdit, onDelete }) {
             borderColor: categoryColor
           }}
         >
-          {task.category}
+          {getCategoryName(task.category)}
         </span>
       </div>
     </div>

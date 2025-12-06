@@ -1,8 +1,4 @@
-import { useTasks } from '../../contexts/TaskContext';
-
-function Filters({ selectedStatus, setSelectedStatus, selectedCategory, setSelectedCategory }) {
-  const { categories, statuses } = useTasks();
-
+function Filters({ selectedStatus, setSelectedStatus, selectedCategory, setSelectedCategory, categories = [], statuses = [] }) {
   const statusOptions = ['All', ...statuses.map(s => s.name)];
   const categoryOptions = ['All', ...categories.map(c => c.name)];
 

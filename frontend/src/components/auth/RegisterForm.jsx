@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import * as api from '../../services/api';
 
 function RegisterForm({ onSwitchToLogin }) {
-  const { register } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -11,8 +10,9 @@ function RegisterForm({ onSwitchToLogin }) {
   });
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
@@ -24,12 +24,16 @@ function RegisterForm({ onSwitchToLogin }) {
       return;
     }
 
-    const result = register(formData.email, formData.password, formData.username);
-    
-    if (!result.success) {
-      setError(result.message);
-    } else {
-      onSwitchToLogin();
+    try {
+      const result = await api.register(formData.username, formData.email, formData.password);
+      
+      if (result.success) {
+        onSwitchToLogin();
+      } else {
+        setError(result.error || 'Registration failed');
+      }
+    } catch (error) {
+      setError('Registration failed. Please try again.');
     }
   };
 

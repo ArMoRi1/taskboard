@@ -1,12 +1,31 @@
 const API_URL = 'http://127.0.0.1:8000/api';
 
-// Налаштування fetch з credentials для сесій
+// Функція для отримання CSRF токену з cookies
+const getCsrfToken = () => {
+  const name = 'csrftoken';
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+};
+
 const fetchWithCredentials = (url, options = {}) => {
+  const csrfToken = getCsrfToken();
+  
   return fetch(url, {
     ...options,
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      ...(csrfToken && { 'X-CSRFToken': csrfToken }),
       ...options.headers,
     },
   });
@@ -37,14 +56,28 @@ export const logout = async () => {
 };
 
 export const getCurrentUser = async () => {
-  const response = await fetchWithCredentials(`${API_URL}/current-user/`);
-  return response.json();
+  try {
+    const response = await fetchWithCredentials(`${API_URL}/current-user/`);
+    
+    if (!response.ok) {
+      return { error: 'Not authenticated' };
+    }
+    
+    return await response.json();
+  } catch (error) {
+    return { error: error.message };
+  }
 };
 
 // Tasks
 export const getTasks = async () => {
-  const response = await fetchWithCredentials(`${API_URL}/tasks/`);
-  return response.json();
+  try {
+    const response = await fetchWithCredentials(`${API_URL}/tasks/`);
+    if (!response.ok) return [];
+    return await response.json();
+  } catch (error) {
+    return [];
+  }
 };
 
 export const createTask = async (task) => {
@@ -71,8 +104,13 @@ export const deleteTask = async (id) => {
 
 // Categories
 export const getCategories = async () => {
-  const response = await fetchWithCredentials(`${API_URL}/categories/`);
-  return response.json();
+  try {
+    const response = await fetchWithCredentials(`${API_URL}/categories/`);
+    if (!response.ok) return [];
+    return await response.json();
+  } catch (error) {
+    return [];
+  }
 };
 
 export const createCategory = async (category) => {
@@ -85,8 +123,13 @@ export const createCategory = async (category) => {
 
 // Statuses
 export const getStatuses = async () => {
-  const response = await fetchWithCredentials(`${API_URL}/statuses/`);
-  return response.json();
+  try {
+    const response = await fetchWithCredentials(`${API_URL}/statuses/`);
+    if (!response.ok) return [];
+    return await response.json();
+  } catch (error) {
+    return [];
+  }
 };
 
 export const createStatus = async (status) => {

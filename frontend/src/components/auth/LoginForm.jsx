@@ -1,20 +1,27 @@
 import { useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext';
+import * as api from '../../services/api';
 
-function LoginForm({ onSwitchToRegister }) {
-  const { login } = useAuth();
+function LoginForm({ onSwitchToRegister, onLogin }) {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = login(formData.email, formData.password);
+    setError('');
     
-    if (!result.success) {
-      setError(result.message);
+    try {
+      const result = await api.login(formData.email, formData.password);
+      
+      if (result.success) {
+        onLogin();
+      } else {
+        setError(result.error || 'Login failed');
+      }
+    } catch (error) {
+      setError('Login failed. Please try again.');
     }
   };
 

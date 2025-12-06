@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css'
 import Header from "./components/layout/Header.jsx";
 import Filters from "./components/layout/Filters.jsx";
@@ -8,12 +8,14 @@ import CategoryModal from "./components/modals/CategoryModal.jsx";
 import StatusModal from "./components/modals/StatusModal.jsx";
 import LoginForm from "./components/auth/LoginForm.jsx";
 import RegisterForm from "./components/auth/RegisterForm.jsx";
-import { useTasks } from './contexts/TaskContext.jsx';
-import { useAuth } from './contexts/AuthContext.jsx';
+import * as api from './services/api';
 
 function App() {
-  const { addTask, updateTask, addCategory, addStatus, categories, statuses } = useTasks();
-  const { isAuthenticated } = useAuth();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [tasks, setTasks] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [statuses, setStatuses] = useState([]);
   
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
@@ -24,9 +26,72 @@ function App() {
   const [selectedStatus, setSelectedStatus] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadData();
+    }
+  }, [isAuthenticated]);
+
+  const checkAuth = async () => {
+    try {
+      const response = await api.getCurrentUser();
+      if (!response.error) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+    } catch (error) {
+      setIsAuthenticated(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadData = async () => {
+    try {
+      const [tasksData, categoriesData, statusesData] = await Promise.all([
+        api.getTasks(),
+        api.getCategories(),
+        api.getStatuses()
+      ]);
+      setTasks(tasksData || []);
+      setCategories(categoriesData || []);
+      setStatuses(statusesData || []);
+    } catch (error) {
+      console.error('Error loading data:', error);
+      setTasks([]);
+      setCategories([]);
+      setStatuses([]);
+    }
+  };
+
+  const handleLogin = () => {
+    setIsAuthenticated(true);
+  };
+
+  const handleLogout = async () => {
+    await api.logout();
+    setIsAuthenticated(false);
+    setTasks([]);
+    setCategories([]);
+    setStatuses([]);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-2xl font-semibold text-gray-600">Loading...</div>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return showLogin 
-      ? <LoginForm onSwitchToRegister={() => setShowLogin(false)} />
+      ? <LoginForm onSwitchToRegister={() => setShowLogin(false)} onLogin={handleLogin} />
       : <RegisterForm onSwitchToLogin={() => setShowLogin(true)} />;
   }
 
@@ -40,27 +105,67 @@ function App() {
     setIsTaskModalOpen(true);
   };
 
-  const handleSaveTask = (taskData) => {
-    if (editingTask) {
-      updateTask({ ...taskData, id: editingTask.id });
-    } else {
-      addTask(taskData);
+  const handleSaveTask = async (taskData) => {
+    try {
+      if (editingTask) {
+        await api.updateTask(editingTask.id, taskData);
+      } else {
+        await api.createTask(taskData);
+      }
+      await loadData();
+      setIsTaskModalOpen(false);
+      setEditingTask(null);
+    } catch (error) {
+      console.error('Error saving task:', error);
     }
-    setIsTaskModalOpen(false);
-    setEditingTask(null);
+  };
+
+  const handleDeleteTask = async (id) => {
+    try {
+      await api.deleteTask(id);
+      await loadData();
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
+  const handleSaveCategory = async (categoryData) => {
+    try {
+      await api.createCategory(categoryData);
+      await loadData();
+      setIsCategoryModalOpen(false);
+    } catch (error) {
+      console.error('Error saving category:', error);
+    }
+  };
+
+  const handleSaveStatus = async (statusData) => {
+    try {
+      await api.createStatus(statusData);
+      await loadData();
+      setIsStatusModalOpen(false);
+    } catch (error) {
+      console.error('Error saving status:', error);
+    }
   };
 
   return (
     <div id="app">
-      <Header/>
+      <Header onLogout={handleLogout} />
       <Filters 
         selectedStatus={selectedStatus}
         setSelectedStatus={setSelectedStatus}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
+        categories={categories}
+        statuses={statuses}
       />
       <TaskList 
+        tasks={tasks}
+        categories={categories}
+        statuses={statuses}
         onEditTask={handleEditTask}
+        onDeleteTask={handleDeleteTask}
         selectedStatus={selectedStatus}
         selectedCategory={selectedCategory}
       />
@@ -80,19 +185,13 @@ function App() {
       <CategoryModal
         isOpen={isCategoryModalOpen}
         onClose={() => setIsCategoryModalOpen(false)}
-        onSave={(data) => {
-          addCategory(data);
-          setIsCategoryModalOpen(false);
-        }}
+        onSave={handleSaveCategory}
       />
 
       <StatusModal
         isOpen={isStatusModalOpen}
         onClose={() => setIsStatusModalOpen(false)}
-        onSave={(data) => {
-          addStatus(data);
-          setIsStatusModalOpen(false);
-        }}
+        onSave={handleSaveStatus}
       />
 
       <div className="fixed bottom-4 right-4 flex flex-col gap-2">

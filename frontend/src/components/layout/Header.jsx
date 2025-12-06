@@ -1,11 +1,14 @@
-function Header() {
+function Header({ onLogout }) {
   return (
-    <header className="bg-gradient-to-r from-blue-500 to-purple-600 shadow-md">
-      <div className="max-w-4xl mx-auto flex flex-col items-center text-center py-6">
-        <h1 className="text-3xl font-bold text-white">My Tasks</h1>
-        <p className="text-blue-100 text-sm mt-1">
-          Organize your day efficiently
-        </p>
+    <header className="bg-gradient-to-r from-blue-500 via-purple-600 to-pink-600 text-white py-6 shadow-lg">
+      <div className="max-w-4xl mx-auto px-8 flex justify-between items-center">
+        <h1 className="text-3xl font-bold tracking-tight">Task Manager</h1>
+        <button
+          onClick={onLogout}
+          className="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg transition-all font-medium"
+        >
+          Logout
+        </button>
       </div>
     </header>
   );

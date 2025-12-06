@@ -82,6 +82,7 @@ def logout_view(request):
     return Response({'success': True})
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def current_user_view(request):
     if request.user.is_authenticated:
         return Response({

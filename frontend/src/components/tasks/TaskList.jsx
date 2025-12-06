@@ -1,9 +1,6 @@
 import TaskListItem from './TaskListItem';
-import { useTasks } from '../../contexts/TaskContext';
 
-function TaskList({ onEditTask, selectedStatus, selectedCategory }) {
-  const { tasks, deleteTask } = useTasks();
-
+function TaskList({ tasks, categories, statuses, onEditTask, onDeleteTask, selectedStatus, selectedCategory }) {
   const filteredTasks = tasks.filter(task => {
     const statusMatch = selectedStatus === 'All' || task.status === selectedStatus;
     const categoryMatch = selectedCategory === 'All' || task.category === selectedCategory;
@@ -24,8 +21,10 @@ function TaskList({ onEditTask, selectedStatus, selectedCategory }) {
               <TaskListItem
                 key={task.id}
                 task={task}
+                categories={categories}
+                statuses={statuses}
                 onEdit={onEditTask}
-                onDelete={deleteTask}
+                onDelete={onDeleteTask}
               />
             ))}
           </div>
