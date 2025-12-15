@@ -11,21 +11,30 @@ const TaskModal = ({ isOpen, onClose, onSave, task = null, categories = [], stat
     if (task) {
       setFormData({
         title: task.title,
-        status: task.status,
-        category: task.category
+        status: task.status?.id || task.status || '',  // ← Підтримка і ID і об'єкта
+        category: task.category?.id || task.category || ''
       });
     } else {
       setFormData({
         title: '',
-        status: statuses[0]?.name || '',
-        category: categories[0]?.name || ''
+        status: statuses[0]?.id || '',  // ← ID замість name!
+        category: categories[0]?.id || ''  // ← ID замість name!
       });
     }
   }, [task, isOpen, categories, statuses]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    
+    // Відправляємо з ID (перетворюємо в числа)
+    const taskData = {
+      title: formData.title,
+      status: parseInt(formData.status),     // ← Перетворюємо в число
+      category: parseInt(formData.category)  // ← Перетворюємо в число
+    };
+    
+    console.log('📤 Sending task:', taskData);  // ← Для debug
+    onSave(taskData);
   };
 
   if (!isOpen) return null;
@@ -64,7 +73,7 @@ const TaskModal = ({ isOpen, onClose, onSave, task = null, categories = [], stat
               className="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:border-purple-500 transition-colors bg-white"
             >
               {statuses.map(status => (
-                <option key={status.id} value={status.name}>{status.name}</option>
+                <option key={status.id} value={status.id}>{status.name}</option>
               ))}
             </select>
           </div>
@@ -79,7 +88,7 @@ const TaskModal = ({ isOpen, onClose, onSave, task = null, categories = [], stat
               className="w-full px-4 py-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:border-purple-500 transition-colors bg-white"
             >
               {categories.map(category => (
-                <option key={category.id} value={category.name}>{category.name}</option>
+                <option key={category.id} value={category.id}>{category.name}</option>
               ))}
             </select>
           </div>
