@@ -1,6 +1,6 @@
 function Filters({ selectedStatus, setSelectedStatus, selectedCategory, setSelectedCategory, categories = [], statuses = [] }) {
-  const statusOptions = ['All', ...statuses.map(s => s.name)];
-  const categoryOptions = ['All', ...categories.map(c => c.name)];
+  const statusOptions = [{ id: 'All', name: 'All' }, ...statuses];
+  const categoryOptions = [{ id: 'All', name: 'All' }, ...categories];
 
   return (
     <div className="bg-gradient-to-r from-indigo-50 to-purple-50 border-b border-purple-200 shadow-sm">
@@ -21,9 +21,7 @@ function Filters({ selectedStatus, setSelectedStatus, selectedCategory, setSelec
                       hover:border-purple-400 transition-colors cursor-pointer"
             >
               {statusOptions.map((s) => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
+                <option key={s.id} value={s.id}>{s.name}</option>
               ))}
             </select>
           </div>
@@ -42,9 +40,7 @@ function Filters({ selectedStatus, setSelectedStatus, selectedCategory, setSelec
                       hover:border-purple-400 transition-colors cursor-pointer"
             >
               {categoryOptions.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
+                <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
           </div>

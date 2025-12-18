@@ -2,8 +2,8 @@ import TaskListItem from './TaskListItem';
 
 function TaskList({ tasks, categories, statuses, onEditTask, onDeleteTask, selectedStatus, selectedCategory }) {
   const filteredTasks = tasks.filter(task => {
-    const statusMatch = selectedStatus === 'All' || task.status === selectedStatus;
-    const categoryMatch = selectedCategory === 'All' || task.category === selectedCategory;
+    const statusMatch = selectedStatus === 'All' || task.status == selectedStatus;
+    const categoryMatch = selectedCategory === 'All' || task.category == selectedCategory;
     return statusMatch && categoryMatch;
   });
 
