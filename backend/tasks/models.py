@@ -3,7 +3,7 @@ from django.conf import settings
 
 class Category(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, blank=True, null=True)
     color = models.CharField(max_length=7)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -16,7 +16,7 @@ class Category(models.Model):
 
 class Status(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, blank=True, null=True)
     color = models.CharField(max_length=7)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -29,7 +29,7 @@ class Status(models.Model):
 
 class Task(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, blank=True, null=True)
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

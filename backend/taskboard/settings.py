@@ -1,14 +1,12 @@
-"""
-Django settings for taskboard project.
-"""
+import os
 
 from pathlib import Path
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-$i*1*7v%ok@jzn0=uq40b6hjtd8djn6qxmr6o7#b_^dh2++^my'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -66,9 +64,9 @@ WSGI_APPLICATION = 'taskboard.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'taskboard',
-        'USER': 'taskuser',
-        'PASSWORD': 'taskpass',
+        'NAME': os.getenv("POSTGRES_DB"),
+        'USER': os.getenv("POSTGRES_USER"),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
         'HOST': 'db',
         'PORT': '5432',
     }

@@ -1,7 +1,7 @@
 function Header({ onLogout }) {
   return (
     <header className="bg-gradient-to-r from-blue-500 via-purple-600 to-pink-600 text-white py-6 shadow-lg">
-      <div className="max-w-4xl mx-auto px-8 flex justify-between items-center">
+      <div className="max-w-4xl mx-auto flex justify-between items-center">
         <h1 className="text-3xl font-bold tracking-tight">Task Manager</h1>
         <button
           onClick={onLogout}
